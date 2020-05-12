@@ -49,7 +49,7 @@ def predict(model, input_path):
 
     [fp, fc, h] = model(color)
 
-    e2p = E2P(cf.pano_size, cf.fp_size, cf.fp_fov)
+    e2p = E2P(cf.pano_size, cf.fp_size, cf.fp_fov, gpu=not args.cpu)
     [fc_up, fc_down] = e2p(fc)
 
     [fp, fc_up, fc_down, h] = Utils.var2np([fp, fc_up, fc_down, h])
@@ -77,7 +77,7 @@ def demo():
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
 
-    model = DuLaNet(args.backbone).to(device)
+    model = DuLaNet(args.backbone, gpu=not args.cpu).to(device)
     
     assert args.ckpt is not None, "need pretrained model"
     assert args.input, "need an input for prediction"
